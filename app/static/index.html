@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#141b22">
+<title>ValetTracker</title>
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23141b22'/><text x='16' y='23' font-size='18' font-family='system-ui' font-weight='700' fill='%23d6a84a' text-anchor='middle'>V</text></svg>">
+</head>
+<body>
+
+<!-- Sign in -->
+<section id="gate" class="gate" hidden>
+  <div class="gate-card">
+    <h1 class="wordmark">Valet<span>Tracker</span></h1>
+    <p class="gate-lot" id="gateLot">Main Lot</p>
+    <div class="pin-display" id="pinDisplay" aria-live="polite" aria-label="PIN entry"></div>
+    <p class="gate-msg" id="gateMsg" role="alert"></p>
+    <div class="keypad">
+      <button class="key" data-key="1">1</button>
+      <button class="key" data-key="2">2</button>
+      <button class="key" data-key="3">3</button>
+      <button class="key" data-key="4">4</button>
+      <button class="key" data-key="5">5</button>
+      <button class="key" data-key="6">6</button>
+      <button class="key" data-key="7">7</button>
+      <button class="key" data-key="8">8</button>
+      <button class="key" data-key="9">9</button>
+      <button class="key key-quiet" data-key="clear">Clear</button>
+      <button class="key" data-key="0">0</button>
+      <button class="key key-go" data-key="enter">Enter</button>
+    </div>
+  </div>
+</section>
+
+<!-- Main app -->
+<div id="app" hidden>
+  <header class="topbar">
+    <div class="topbar-name">
+      <span class="wordmark small">Valet<span>Tracker</span></span>
+      <span class="lot" id="lotName">Main Lot</span>
+    </div>
+    <div class="topbar-actions">
+      <a class="ghost-btn" id="exportLink" href="/api/export.csv?scope=all" download>Export CSV</a>
+      <button class="ghost-btn" id="signOut">Sign out</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <button class="park-btn" id="openNew">
+      <span class="park-btn-plus">+</span>
+      Park a car
+    </button>
+
+    <nav class="filters" id="filters" aria-label="Filter tickets">
+      <button class="chip is-on" data-view="all">On lot <b id="cAll">0</b></button>
+      <button class="chip" data-view="requested">Waiting <b id="cReq">0</b></button>
+      <button class="chip" data-view="ready">Out front <b id="cReady">0</b></button>
+      <button class="chip" data-view="history">History</button>
+    </nav>
+
+    <div class="searchbar">
+      <input id="search" type="search" inputmode="search" autocomplete="off"
+             placeholder="Find a ticket, plate, or spot">
+    </div>
+
+    <p class="pace" id="pace"></p>
+
+    <div id="list" class="list"></div>
+    <p class="empty" id="empty" hidden></p>
+  </main>
+</div>
+
+<!-- New / edit ticket -->
+<div class="sheet-backdrop" id="sheetBackdrop" hidden>
+  <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <header class="sheet-head">
+      <h2 id="sheetTitle">Park a car</h2>
+      <button class="ghost-btn" id="closeSheet" aria-label="Close">Cancel</button>
+    </header>
+
+    <form id="ticketForm" class="sheet-body" novalidate>
+      <label class="field field-ticket">
+        <span>Ticket number</span>
+        <input name="ticket_no" id="ticketNo" class="ticket-input" inputmode="numeric"
+               autocomplete="off" required>
+      </label>
+
+      <div class="row">
+        <label class="field">
+          <span>License plate</span>
+          <input name="plate" autocomplete="off" placeholder="8KJZ123">
+        </label>
+        <label class="field">
+          <span>Parking spot</span>
+          <input name="spot" autocomplete="off" placeholder="B-14">
+        </label>
+      </div>
+
+      <label class="field">
+        <span>Color</span>
+        <input name="color" id="colorInput" autocomplete="off" placeholder="Black">
+      </label>
+      <div class="swatches" id="swatches"></div>
+
+      <div class="row">
+        <label class="field">
+          <span>Make</span>
+          <input name="make" autocomplete="off" placeholder="Audi">
+        </label>
+        <label class="field">
+          <span>Model</span>
+          <input name="model" autocomplete="off" placeholder="Q5">
+        </label>
+      </div>
+
+      <div class="row">
+        <label class="field">
+          <span>Guest phone</span>
+          <input name="phone" type="tel" autocomplete="off" placeholder="Optional">
+        </label>
+        <label class="field">
+          <span>Notes</span>
+          <input name="notes" autocomplete="off" placeholder="Roof rack, dog inside">
+        </label>
+      </div>
+
+      <p class="form-msg" id="formMsg" role="alert"></p>
+      <button type="submit" class="submit-btn" id="submitBtn">Park it</button>
+    </form>
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="/app.js"></script>
+</body>
+</html>

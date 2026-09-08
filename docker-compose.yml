@@ -1,0 +1,21 @@
+services:
+  valettracker:
+    image: ${VT_IMAGE:-ghcr.io/OWNER/valettracker:latest}
+    container_name: valettracker
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ:-America/Los_Angeles}
+      LOT_NAME: ${LOT_NAME:-Main Lot}
+      SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY in .env}
+      STAFF_PIN: ${STAFF_PIN:?set STAFF_PIN in .env}
+      ADMIN_PIN: ${ADMIN_PIN:-}
+      SESSION_HOURS: ${SESSION_HOURS:-12}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      DB_PATH: /data/valettracker.db
+    ports:
+      - "${HOST_PORT:-8080}:8000"
+    volumes:
+      - valettracker-data:/data
+
+volumes:
+  valettracker-data:
